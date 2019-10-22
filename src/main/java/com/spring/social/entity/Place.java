@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Data
 @Entity
@@ -20,12 +21,43 @@ public class Place {
     private int id;
 
     @NotNull
+    @Column(name = "name")
+    private String name;
+
+    @NotNull
     @Column(name = "summary")
     private String summary;
 
     @NotNull
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @NotNull
+    @Column(length = 10)
+    private float rating;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "place")
+    private Set<PlaceImage> placeImages;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "place")
+    private Set<RatePlace> ratePlaces;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "place")
+    private Set<CommentPlace> commentPlaces;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private long createdAt;
