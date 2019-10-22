@@ -6,26 +6,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
 @Getter
 @Setter
-@Table(name = "place")
-public class Place {
+@Table(name = "comment_place")
+public class CommentPlace {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_place_id")
     private int id;
+    private String title;
 
-    @NotNull
-    @Column(name = "summary")
-    private String summary;
-
-    @NotNull
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private long createdAt;
@@ -35,7 +39,7 @@ public class Place {
 
     private int status;
 
-    public Place() {
+    public CommentPlace() {
         this.createdAt = System.currentTimeMillis();
         this.updatedAt = System.currentTimeMillis();
         this.status = 1;

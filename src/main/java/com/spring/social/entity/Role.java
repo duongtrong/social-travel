@@ -3,21 +3,28 @@ package com.spring.social.entity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
-@Entity
 @Getter
 @Setter
-public class Category {
+@Entity
+@Table(name = "role")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private int id;
 
-    @NotNull
+    @NaturalId
+    @Enumerated(EnumType.STRING)
     @Column(name = "name")
-    private String name;
+    private RoleName name;
+}
+
+enum RoleName {
+    USER,ADMIN
 }

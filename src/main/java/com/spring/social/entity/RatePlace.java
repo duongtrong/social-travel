@@ -6,26 +6,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
-@Entity
 @Getter
 @Setter
-@Table(name = "place")
-public class Place {
+@Entity
+@Table(name = "rate_place")
+public class RatePlace {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private int rate_point;
 
-    @NotNull
-    @Column(name = "summary")
-    private String summary;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "place_id")
+    private Place place;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private long createdAt;
@@ -35,7 +35,7 @@ public class Place {
 
     private int status;
 
-    public Place() {
+    public RatePlace() {
         this.createdAt = System.currentTimeMillis();
         this.updatedAt = System.currentTimeMillis();
         this.status = 1;

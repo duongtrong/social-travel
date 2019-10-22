@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigInteger;
+import java.util.Set;
 
 @Data
 @Entity
@@ -48,6 +49,37 @@ public class User {
     @NotBlank
     @Column(name = "address")
     private String address;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "user")
+    private Set<Place> places;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "user")
+    private Set<RatePlaceImage> ratePlaceImages;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "user")
+    private Set<RatePlace> ratePlaces;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "user")
+    private Set<CommentPlace> commentPlaces;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "user")
+    private Set<CommentImage> commentImages;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private long createdAt;
